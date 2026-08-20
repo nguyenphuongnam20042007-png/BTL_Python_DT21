@@ -179,11 +179,11 @@ Dự án này **hoàn thành đầy đủ các yêu cầu** của đề DT21:
 
 ## 👥 Nhóm 6
 
-| Người | MSSV | Công việc |
+| Người | MSSV | Đóng góp |
 |------|------|---------|
-| Nguyễn Phương Nam | 3120225094 | Nhóm trưởng |
-| Đào Nhật Minh | 3120225091 | Thành viên |
-| Thái Thị Hoàng Trinh | - | Thành viên |
+| Nguyễn Phương Nam | 3120225094 | 100% |
+| Đào Nhật Minh | 3120225091 | 100% |
+| Thái Thị Hoàng Trinh | 3120225163 | 100% |
 
-**Giáo viên:** Nguyễn Hoàng Hải
+**Giảng viên:** Nguyễn Hoàng Hải
 
