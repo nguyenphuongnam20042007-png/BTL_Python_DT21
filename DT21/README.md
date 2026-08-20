@@ -1,107 +1,189 @@
-# DT21 — Phân tích cảm xúc bình luận tiếng Việt
+# ⚡ PHÂN TÍCH CẢM XÚC TIẾNG VIỆT 
 
-Bài tập lớn cuối kỳ - Đề tài DT21 (mức Nâng cao)
+**Đề tài DT21 | Nhóm 6 | Lập trình Python**
 
-## 1. Giới thiệu
+---
 
-Notebook thực hiện phân tích cảm xúc (tích cực / tiêu cực / trung tính) trên các bình luận,
-phản hồi tiếng Việt, sử dụng đồng thời 2 hướng tiếp cận:
+## ❓ Vấn đề
 
-- **Từ điển (lexicon-based):** đếm từ tích cực/tiêu cực để tính điểm cảm xúc cho từng câu.
-- **Học máy (nâng cao):** TF-IDF + Logistic Regression, có đánh giá độ chính xác.
+Hàng triệu bình luận được tạo ra mỗi ngày trên mạng xã hội, Tiki, Shopee... nhưng **không ai có thời gian đọc hết**. Cần một công cụ tự động để phân loại: **tích cực (👍)** hay **tiêu cực (👎)** hay **trung tính (😐)**
 
-## 2. Cấu trúc thư mục
+---
+
+## ✅ Giải pháp
+
+| Phương pháp | Cách thức | Chính xác | Ưu điểm | Nhược điểm |
+|----------|---------|---------|--------|----------|
+| **Từ điển** | Đếm từ tích cực/tiêu cực | **40.96%** | Dễ hiểu | Không xử lý ngữ cảnh |
+| **Học máy** | TF-IDF + Logistic Regression | **79.45%** ⭐ | Chính xác | Như hộp đen |
+
+**Kết luận:** Máy học tốt hơn 38.5% 🚀
+
+---
+
+## 📊 Dữ liệu
+
+- **Nguồn 1:** UIT-VSFC (CSV) - 8.144 bình luận về môn học
+- **Nguồn 2:** Dữ liệu tự biên soạn (JSON) - 5 bình luận bổ sung
+- **Xử lý:** Loại NaN (24 dòng), duplicates (12 dòng), ngoại lai tiếng Anh (315 dòng) ⚠️
+- **Kết quả:** 7.834 bản ghi sạch ✅
+
+---
+
+## 🏗️ Kiến trúc
 
 ```
-.
-├── README.md
-├── requirements.txt
-├── data/
-│   ├── uit_vsfc.csv          # Nguồn 1 — bộ dữ liệu phản hồi sinh viên UIT-VSFC (CSV)
-│   └── du_lieu_them.json     # Nguồn 2 — dữ liệu bổ sung do nhóm thu thập (JSON)
-└── notebook/
-    └── 1_tai_du_lieu.ipynb   # Notebook chính: đọc dữ liệu, tiền xử lý, phân tích, trực quan hóa
+4 Lớp (Classes):
+1. DocDuLieu              → Đọc CSV + JSON, gộp dữ liệu
+2. TienXuLyVanBan        → Tách từ, loại stopword
+3. PhanTichTuDien        → Từ điển (40.96%)
+4. MoHinhHocMayCamXuc    → ML (79.45%)
 ```
 
-## 3. Mô tả dữ liệu
+---
 
-### 3.1. `data/uit_vsfc.csv`
-Bộ dữ liệu công khai UIT-VSFC — phản hồi của sinh viên về môn học. Các trường dữ liệu:
+## 🔬 5 Câu hỏi phân tích được trả lời
 
-| Cột | Kiểu dữ liệu | Mô tả |
-|---|---|---|
-| `sentence` | text | Nội dung câu phản hồi/bình luận (tiếng Việt) |
-| `sentiment` | text | Nhãn cảm xúc: `positive` / `negative` / `neutral` |
-| `topic` | text | Chủ đề: `lecturer`, `curriculum`, `facility`, `others` |
+| # | Câu hỏi | Trả lời | Biểu đồ |
+|---|--------|--------|--------|
+| 1 | Top 5 từ xuất hiện nhiều? | giảng_viên, sinh_viên, môn, học, tốt | Bar |
+| 2 | % tích cực ở từng chủ đề? | Khá đồng đều (~25% mỗi cái) | Pie |
+| 3 | Chủ đề nào có % tiêu cực cao? | **Cơ sở vật chất (36.3%)** | Grouped Bar |
+| 4 | Bình luận tiêu cực dài hơn? | **Có** (con người khi chê hay trình bày chi tiết) | Boxplot |
+| 5 | Từ đặc trưng của mỗi cảm xúc? | Positive: "tận_tâm", Negative: "khó_hiểu" | WordCloud |
 
-### 3.2. `data/du_lieu_them.json`
-Dữ liệu bổ sung do nhóm thu thập/biên soạn thêm, cùng cấu trúc 3 trường như trên
-(`sentence`, `sentiment`, `topic`) để có thể gộp trực tiếp với nguồn 1.
+---
 
-> Lưu ý: nhãn `topic` giữa 2 nguồn không hoàn toàn giống nhau về tên gọi (ví dụ `teacher` ở JSON
-> tương ứng với `lecturer` ở CSV) — notebook đã tự động chuẩn hóa 2 nhãn này về cùng một giá trị
-> trong bước tiền xử lý.
+## 📈 Kết quả chính
 
-## 4. Yêu cầu môi trường
+### Phương pháp từ điển
+```
+Accuracy: 40.96%
+Precision: negative (0.82) > positive (0.49) > neutral (0.32)
+Recall:    neutral (0.64) > positive (0.43) > negative (0.19)
+```
+👉 *Kết luận: Phương pháp "thận trọng" - chỉ gán negative khi rất chắc chắn*
 
-- Python **3.9 trở lên**
-- Các thư viện liệt kê trong `requirements.txt`, gồm 4 nhóm chính:
+### Phương pháp học máy  
+```
+Accuracy: 79.45% ⭐⭐⭐
+Negative: F1 = 0.94 (xuất sắc!)
+Positive: F1 = 0.75 (tốt)
+Neutral:  F1 = 0.68 (khó phân biệt)
+```
+👉 *Kết luận: ML hiệu quả hơn từ điển tới **38.5 điểm phần trăm***
 
-| Nhóm | Thư viện | Mục đích |
-|---|---|---|
-| Xử lý dữ liệu | `pandas`, `numpy` | Đọc CSV/JSON, làm sạch, biến đổi dữ liệu |
-| NLP tiếng Việt | `underthesea` | Tách từ tiếng Việt |
-| Trực quan hóa | `matplotlib`, `seaborn`, `wordcloud` | Vẽ biểu đồ và đám mây từ |
-| Học máy | `scikit-learn`, `scipy` | TF-IDF, Logistic Regression, đánh giá mô hình |
-| Notebook | `jupyter`, `notebook` | Mở và chạy file `.ipynb` |
+---
 
-Toàn bộ version trong `requirements.txt` đã được **cài đặt và kiểm thử thực tế trong một môi
-trường sạch** (không phải xuất từ `pip freeze` của máy cá nhân) — nhóm đã xác nhận notebook chạy
-thành công 100% (0 lỗi) khi cài đặt chỉ bằng đúng file này trên một virtual environment mới, đảm
-bảo khả năng tái lập trên máy khác.
-
-## 5. Hướng dẫn cài đặt và chạy
-
-### Bước 1 — Tạo môi trường ảo (khuyến khích, không bắt buộc)
+## 🛠️ Cách chạy
 
 ```bash
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-```
-
-### Bước 2 — Cài đặt thư viện
-
-```bash
+# 1. Cài đặt
 pip install -r requirements.txt
-```
 
-### Bước 3 — Mở và chạy notebook
-
-```bash
+# 2. Mở notebook
 jupyter notebook notebook/1_tai_du_lieu.ipynb
+
+# 3. Chọn Kernel → Restart & Run All
 ```
 
-Sau khi notebook mở ra, chọn **Kernel → Restart & Run All** để chạy tuần tự toàn bộ từ đầu đến
-cuối. Notebook đã được kiểm thử chạy thành công theo đúng cách này trước khi nộp.
+**Thời gian:** ~3-5 phút chạy hết
 
-> **Lưu ý về đường dẫn:** notebook đọc dữ liệu bằng đường dẫn tương đối `../data/...` (tính từ vị
-> trí notebook trong thư mục `notebook/`). Nếu bạn di chuyển notebook sang vị trí khác, hãy giữ
-> nguyên cấu trúc `data/` nằm cùng cấp với thư mục `notebook/`, hoặc đặt trực tiếp 2 file dữ liệu
-> vào cùng thư mục với notebook — hàm `tim_duong_dan()` trong notebook sẽ tự dò tìm cả hai vị trí.
+---
 
-## 6. Nội dung chính trong notebook
+## 📁 Cấu trúc thư mục
 
-1. Đọc dữ liệu từ 2 nguồn/định dạng khác nhau (CSV + JSON), gộp và chuẩn hóa nhãn.
-2. Tiền xử lý: loại dữ liệu thiếu, trùng lặp, dữ liệu ngoại lai (câu không phải tiếng Việt),
-   tách từ bằng `underthesea`, loại từ dừng.
-3. Phân tích cảm xúc theo phương pháp từ điển (lexicon-based).
-4. Trả lời 5 câu hỏi phân tích, kèm 5 loại biểu đồ trực quan hóa (bar, pie, grouped bar,
-   boxplot, wordcloud) và diễn giải ý nghĩa từng biểu đồ.
-5. Phân tích cảm xúc bằng mô hình học máy (TF-IDF + Logistic Regression) — nội dung nâng cao.
-6. So sánh kết quả 2 phương pháp và kết luận.
+```
+├── data/
+│   ├── uit_vsfc.csv          (8.144 bản ghi)
+│   └── du_lieu_them.json     (5 bản ghi)
+├── notebook/
+│   └── 1_tai_du_lieu.ipynb   (Code chính)
+├── README.md                 (File này)
+└── requirements.txt          (Thư viện)
+```
 
- |STT|       Họ và tên          |    MSSV    | Nhiệm vụ đảm nhận | Đánh giá |                                                
- | 1 | **Nguyễn Phương Nam**    | 3120225094 | Đọc/gộp dữ liệu, Mô hình Học máy, Quản lý GitHub. | 100% |                    
- | 2 | **Đào Nhật Minh**        | 3120225091 | Tiền xử lý ngôn ngữ, Trực quan hóa , Hoàn thiện README. | 100% |              
- | 3 | **Thái Thị Hoàng Trinh** | 3120225163 | Lập trình Từ điển; Tổng hợp số liệu và viết báo cáo Word. | 100% |             
+---
+
+## 🔑 Điểm nổi bật
+
+✅ **Phát hiện dữ liệu ngoại lai:** 315 dòng tiếng Anh lẫn trong CSV (3.9%) - Chất lượng dữ liệu tốt!
+
+✅ **2 Phương pháp so sánh:** Không chỉ làm, mà còn so sánh được khi nào dùng cái nào
+
+✅ **4 Lớp OOP:** Tuân thủ nguyên tắc lập trình sạch - dễ bảo trì, mở rộng
+
+✅ **5 Loại biểu đồ:** Bar, Pie, Grouped Bar, Boxplot, WordCloud - Trực quan hóa đẹp
+
+✅ **2 Nguồn dữ liệu:** CSV + JSON - Xử lý đa định dạng
+
+---
+
+## ⚠️ Hạn chế & Cải thiện
+
+| Hạn chế | Cách sửa |
+|--------|---------|
+| Từ điển chỉ 62 từ | Dùng VietSentiWordNet hoặc mở rộng |
+| Không xử lý phủ định ("không tốt") | Thêm kiểm tra từ phủ định |
+| Chỉ 1 thuật toán ML | Thử SVM, Naive Bayes, XGBoost, LSTM |
+| Không cross-validation | Thêm k-fold CV để kiểm chứng ổn định |
+
+---
+
+## 📚 Thư viện dùng
+
+```python
+pandas          # Xử lý dữ liệu
+numpy           # Tính toán số học
+underthesea     # Tách từ tiếng Việt ⭐
+scikit-learn    # Máy học (TF-IDF, LogReg)
+matplotlib      # Biểu đồ
+seaborn         # Biểu đồ đẹp
+wordcloud       # Đám mây từ
+jupyter         # Notebook
+```
+
+---
+
+## 🎓 Kỹ năng sử dụng
+
+- ✅ **Xử lý dữ liệu:** pandas, numpy
+- ✅ **NLP tiếng Việt:** underthesea
+- ✅ **Máy học:** scikit-learn (TF-IDF, Logistic Regression)
+- ✅ **Trực quan hóa:** matplotlib, seaborn, wordcloud
+- ✅ **Lập trình OOP:** Classes, methods, docstrings
+- ✅ **Git & Jupyter Notebook:** Workflow chuyên nghiệp
+
+---
+
+## 🚀 Hướng phát triển
+
+1. **Ngắn hạn:** Mở rộng từ điển, xử lý phủ định, cross-validation
+2. **Trung hạn:** Thử nhiều thuật toán (SVM, XGBoost), scrape dữ liệu real-world
+3. **Dài hạn:** Deep learning (LSTM, PhoBERT), web app, phân tích khía cạnh
+
+---
+
+## 📝 Kết luận
+
+Dự án này **hoàn thành đầy đủ các yêu cầu** của đề DT21:
+- ✅ Đọc 2+ nguồn dữ liệu
+- ✅ Tiền xử lý chi tiết
+- ✅ 2 phương pháp phân tích
+- ✅ 5 câu hỏi + 5 biểu đồ
+- ✅ So sánh & kết luận
+- ✅ Mã nguồn OOP sạch
+- ✅ Tài liệu đầy đủ
+
+---
+
+## 👥 Nhóm 6
+
+| Người | MSSV | Công việc |
+|------|------|---------|
+| Nguyễn Phương Nam | 3120225094 | Nhóm trưởng |
+| Đào Nhật Minh | 3120225091 | Thành viên |
+| Thái Thị Hoàng Trinh | - | Thành viên |
+
+**Giáo viên:** Nguyễn Hoàng Hải
 
