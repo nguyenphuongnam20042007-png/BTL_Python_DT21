@@ -1,0 +1,27 @@
+[
+    {
+        "sentence": "Ký túc xá mạng wifi rất yếu, cần nâng cấp.",
+        "sentiment": "negative",
+        "topic": "facility"
+    },
+    {
+        "sentence": "Thư viện trường rất đẹp và yên tĩnh, nhiều sách hay.",
+        "sentiment": "positive",
+        "topic": "facility"
+    },
+    {
+        "sentence": "Giảng viên môn này chấm điểm hơi khắt khe.",
+        "sentiment": "negative",
+        "topic": "teacher"
+    },
+    {
+        "sentence": "Nhà để xe rộng rãi nhưng hay bị ùn tắc giờ cao điểm.",
+        "sentiment": "neutral",
+        "topic": "facility"
+    },
+    {
+        "sentence": "Hệ thống đăng ký học phần đợt này hoạt động rất mượt mà.",
+        "sentiment": "positive",
+        "topic": "facility"
+    }
+]
