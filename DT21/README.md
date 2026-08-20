@@ -100,8 +100,8 @@ cuối. Notebook đã được kiểm thử chạy thành công theo đúng các
 5. Phân tích cảm xúc bằng mô hình học máy (TF-IDF + Logistic Regression) — nội dung nâng cao.
 6. So sánh kết quả 2 phương pháp và kết luận.
 
- |STT|       Họ và tên          |    MSSV    | Nhiệm vụ đảm nhận | Đánh giá |
- | 1 | **Nguyễn Phương Nam**    | 3120225094 | Đọc/gộp dữ liệu, Mô hình Học máy, Quản lý GitHub. | 100% |
- | 2 | **Đào Nhật Minh**        | 3120225091 | Tiền xử lý ngôn ngữ, Trực quan hóa , Hoàn thiện README. | 100% |
- | 3 | **Thái Thị Hoàng Trinh** | 3120225163 | Lập trình Từ điển; Tổng hợp số liệu và viết báo cáo Word. | 100% |
+ |STT|       Họ và tên          |    MSSV    | Nhiệm vụ đảm nhận | Đánh giá |                                                
+ | 1 | **Nguyễn Phương Nam**    | 3120225094 | Đọc/gộp dữ liệu, Mô hình Học máy, Quản lý GitHub. | 100% |                    
+ | 2 | **Đào Nhật Minh**        | 3120225091 | Tiền xử lý ngôn ngữ, Trực quan hóa , Hoàn thiện README. | 100% |              
+ | 3 | **Thái Thị Hoàng Trinh** | 3120225163 | Lập trình Từ điển; Tổng hợp số liệu và viết báo cáo Word. | 100% |             
 
