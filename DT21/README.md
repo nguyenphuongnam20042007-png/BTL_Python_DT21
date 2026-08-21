@@ -4,15 +4,7 @@
 
 ---
 
-## 📋 MỤC LỤC
 
-1. [Yêu cầu hệ thống](#yêu-cầu-hệ-thống)
-2. [Cài đặt Python 3.13.19](#bước-1-cài-đặt-python-31319)
-3. [Tải & Setup Project](#bước-2-tải--setup-project)
-4. [Chạy chương trình](#bước-3-chạy-chương-trình)
-5. [Troubleshooting](#troubleshooting)
-
----
 
 ## ✅ YÊU CẦU HỆ THỐNG
 
