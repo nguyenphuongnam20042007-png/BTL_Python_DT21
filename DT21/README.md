@@ -1,189 +1,405 @@
-# ⚡ PHÂN TÍCH CẢM XÚC TIẾNG VIỆT 
+# 📖 HƯỚNG DẪN CÀI ĐẶT & CHẠY CHƯƠNG TRÌNH
 
-**Đề tài DT21 | Nhóm 6 | Lập trình Python**
-
----
-
-## ❓ Vấn đề
-
-Hàng triệu bình luận được tạo ra mỗi ngày trên mạng xã hội, Tiki, Shopee... nhưng **không ai có thời gian đọc hết**. Cần một công cụ tự động để phân loại: **tích cực (👍)** hay **tiêu cực (👎)** hay **trung tính (😐)**
+**Phân tích cảm xúc bình luận tiếng Việt - Đề tài DT21**
 
 ---
 
-## ✅ Giải pháp
+## 📋 MỤC LỤC
 
-| Phương pháp | Cách thức | Chính xác | Ưu điểm | Nhược điểm |
-|----------|---------|---------|--------|----------|
-| **Từ điển** | Đếm từ tích cực/tiêu cực | **40.96%** | Dễ hiểu | Không xử lý ngữ cảnh |
-| **Học máy** | TF-IDF + Logistic Regression | **79.45%** ⭐ | Chính xác | Như hộp đen |
-
-**Kết luận:** Máy học tốt hơn 38.5% 🚀
-
----
-
-## 📊 Dữ liệu
-
-- **Nguồn 1:** UIT-VSFC (CSV) - 8.144 bình luận về môn học
-- **Nguồn 2:** Dữ liệu tự biên soạn (JSON) - 5 bình luận bổ sung
-- **Xử lý:** Loại NaN (24 dòng), duplicates (12 dòng), ngoại lai tiếng Anh (315 dòng) ⚠️
-- **Kết quả:** 7.834 bản ghi sạch ✅
+1. [Yêu cầu hệ thống](#yêu-cầu-hệ-thống)
+2. [Cài đặt Python 3.13.19](#bước-1-cài-đặt-python-31319)
+3. [Tải & Setup Project](#bước-2-tải--setup-project)
+4. [Chạy chương trình](#bước-3-chạy-chương-trình)
+5. [Troubleshooting](#troubleshooting)
 
 ---
 
-## 🏗️ Kiến trúc
+## ✅ YÊU CẦU HỆ THỐNG
 
+- **Python:** 3.13.19 trở lên
+- **RAM:** 2GB trở lên
+- **Ổ cứng:** 500MB trống
+- **OS:** Windows, macOS, hoặc Linux
+
+---
+
+## 🐍 BƯỚC 1: CÀI ĐẶT PYTHON 3.13.19
+
+### 1.1 Tải Python
+
+**Truy cập:** https://www.python.org/downloads/
+
+Tìm và tải **Python 3.13.19** (hoặc 3.13 mới nhất)
+
+### 1.2 Cài đặt
+
+#### 🪟 Windows:
 ```
-4 Lớp (Classes):
-1. DocDuLieu              → Đọc CSV + JSON, gộp dữ liệu
-2. TienXuLyVanBan        → Tách từ, loại stopword
-3. PhanTichTuDien        → Từ điển (40.96%)
-4. MoHinhHocMayCamXuc    → ML (79.45%)
+1. Chạy file .exe
+2. ⚠️ QUAN TRỌNG: Tick ☑️ "Add python.exe to PATH"
+3. Click "Install Now"
+4. Chờ hoàn thành
 ```
 
----
-
-## 🔬 5 Câu hỏi phân tích được trả lời
-
-| # | Câu hỏi | Trả lời | Biểu đồ |
-|---|--------|--------|--------|
-| 1 | Top 5 từ xuất hiện nhiều? | giảng_viên, sinh_viên, môn, học, tốt | Bar |
-| 2 | % tích cực ở từng chủ đề? | Khá đồng đều (~25% mỗi cái) | Pie |
-| 3 | Chủ đề nào có % tiêu cực cao? | **Cơ sở vật chất (36.3%)** | Grouped Bar |
-| 4 | Bình luận tiêu cực dài hơn? | **Có** (con người khi chê hay trình bày chi tiết) | Boxplot |
-| 5 | Từ đặc trưng của mỗi cảm xúc? | Positive: "tận_tâm", Negative: "khó_hiểu" | WordCloud |
-
----
-
-## 📈 Kết quả chính
-
-### Phương pháp từ điển
+#### 🍎 macOS:
 ```
-Accuracy: 40.96%
-Precision: negative (0.82) > positive (0.49) > neutral (0.32)
-Recall:    neutral (0.64) > positive (0.43) > negative (0.19)
+1. Chạy file .pkg
+2. Làm theo hướng dẫn trên màn hình
+3. Nhập password khi cần
 ```
-👉 *Kết luận: Phương pháp "thận trọng" - chỉ gán negative khi rất chắc chắn*
 
-### Phương pháp học máy  
+#### 🐧 Linux (Ubuntu/Debian):
+```bash
+sudo apt update
+sudo apt install python3.13 python3.13-venv
 ```
-Accuracy: 79.45% ⭐⭐⭐
-Negative: F1 = 0.94 (xuất sắc!)
-Positive: F1 = 0.75 (tốt)
-Neutral:  F1 = 0.68 (khó phân biệt)
-```
-👉 *Kết luận: ML hiệu quả hơn từ điển tới **38.5 điểm phần trăm***
 
----
+### 1.3 Kiểm tra cài đặt
 
-## 🛠️ Cách chạy
+Mở Terminal/Command Prompt và chạy:
 
 ```bash
-# 1. Cài đặt
+python --version
+```
+
+✅ Kết quả phải là: `Python 3.13.19` (hoặc 3.13.x)
+
+---
+
+## 📁 BƯỚC 2: TẢI & SETUP PROJECT
+
+### 2.1 Tải Project
+
+**Cách A - Nếu có Git:**
+```bash
+git clone <link_repo>
+cd project_folder
+```
+
+**Cách B - Download ZIP:**
+1. Download file ZIP từ GitHub
+2. Giải nén vào thư mục bất kỳ
+3. Mở Terminal, cd vào thư mục đó
+
+### 2.2 Tạo Virtual Environment
+
+Virtual environment giúp cài thư viện riêng, tránh xung đột.
+
+#### Windows:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+#### macOS/Linux:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+✅ **Nếu thành công**, bạn sẽ thấy `(venv)` ở đầu dòng lệnh:
+```
+(venv) C:\Users\...\project>    # Windows
+(venv) user@computer:~/project$ # macOS/Linux
+```
+
+### 2.3 Cài đặt thư viện
+
+```bash
 pip install -r requirements.txt
-
-# 2. Mở notebook
-jupyter notebook notebook/1_tai_du_lieu.ipynb
-
-# 3. Chọn Kernel → Restart & Run All
 ```
 
-**Thời gian:** ~3-5 phút chạy hết
+**Chờ 5 phút** để cài tất cả các thư viện cần thiết
+
+✅ Hoàn thành khi thấy: `Successfully installed ...`
 
 ---
 
-## 📁 Cấu trúc thư mục
+## ▶️ BƯỚC 3: CHẠY CHƯƠNG TRÌNH
+
+Chọn **1 trong 2 cách** dưới đây:
+
+---
+
+## 🔹 **CÁCH 1: JUPYTER NOTEBOOK (Dễ nhất)**
+
+### Cài đặt thêm Jupyter (nếu chưa có)
+```bash
+pip install jupyter notebook
+```
+
+### Chạy Jupyter
+```bash
+jupyter notebook
+```
+
+✅ Browser tự mở, bạn sẽ thấy danh sách file/folder
+
+### Chạy code
+1. Click vào folder `notebook/`
+2. Click vào file `1_tai_du_lieu.ipynb`
+3. Notebook mở ra
+4. Nhấn **Kernel** → **Restart & Run All**
+5. Chờ 3-5 phút cho code chạy xong
+
+### Xem kết quả
+- 📊 **Biểu đồ** hiển thị tự động
+- 📈 **Độ chính xác:** Accuracy = 79.45%
+- 📝 **Phân tích:** Chi tiết từng câu hỏi
+- 📋 **Thống kê:** Số liệu được ghi rõ
+
+---
+
+## 🔹 **CÁCH 2: VS CODE (Chuyên nghiệp)**
+
+### Bước 1: Cài VS Code
+Tải từ: https://code.visualstudio.com/
+
+### Bước 2: Cài Extension Python
+1. Mở VS Code
+2. Click **Extensions** (biểu tượng 4 khối ở thanh bên trái)
+3. Tìm **"Python"** (của Microsoft)
+4. Click **Install**
+
+### Bước 3: Cài Extension Jupyter (nếu muốn chạy .ipynb)
+1. Tìm **"Jupyter"** (của Microsoft)
+2. Click **Install**
+
+### Bước 4: Mở Project trong VS Code
+1. **File** → **Open Folder**
+2. Chọn folder project của bạn
+3. Click **Select Folder**
+
+### Bước 5: Kích hoạt Virtual Environment
+
+Nhấn **Ctrl + `** (backtick) để mở Terminal:
+
+#### Windows:
+```bash
+venv\Scripts\activate
+```
+
+#### macOS/Linux:
+```bash
+source venv/bin/activate
+```
+
+✅ Nếu thành công, thấy `(venv)` ở đầu dòng
+
+### Bước 6: Chọn Python Interpreter
+
+1. Nhấn **Ctrl + Shift + P** (hoặc **Cmd + Shift + P** trên Mac)
+2. Gõ: `Python: Select Interpreter`
+3. Chọn **"./venv/bin/python"**
+
+### Bước 7: Chạy code
+
+#### Cách 7.1: Chạy file Python thường (.py)
+- Mở file `.py` bất kỳ
+- Click nút **▶️ (Play)** ở góc trên phải
+- hoặc nhấn **F5**
+
+#### Cách 7.2: Chạy Jupyter Notebook (.ipynb)
+- Mở file `1_tai_du_lieu.ipynb`
+- Click **▶️** trước mỗi cell hoặc **Run All**
+
+#### Cách 7.3: Chạy qua Terminal
+```bash
+# Python file
+python script.py
+
+# Jupyter notebook
+jupyter notebook
+```
+
+---
+
+## ✅ KIỂM TRA CÀI ĐẶT THÀNH CÔNG
+
+Nếu bạn thấy một trong những dấu hiệu này → **Mọi thứ OK!** ✅
+
+- ✅ Jupyter hiển thị danh sách file/folder
+- ✅ File `.ipynb` mở được trong VS Code
+- ✅ Code chạy không có lỗi đỏ
+- ✅ Hiển thị biểu đồ (bar, pie, boxplot, v.v.)
+- ✅ Thấy: `Accuracy: 79.45%`
+
+---
+
+## 📊 CẤU TRÚC THƯMỤC (BẮT BUỘC)
+
+Đảm bảo cấu trúc như thế này:
 
 ```
+project_folder/
+│
 ├── data/
-│   ├── uit_vsfc.csv          (8.144 bản ghi)
-│   └── du_lieu_them.json     (5 bản ghi)
+│   ├── uit_vsfc.csv              ✅ File CSV (8.144 dòng)
+│   └── du_lieu_them.json         ✅ File JSON (5 dòng)
+│
 ├── notebook/
-│   └── 1_tai_du_lieu.ipynb   (Code chính)
-├── README.md                 (File này)
-└── requirements.txt          (Thư viện)
+│   └── 1_tai_du_lieu.ipynb      ✅ File code chính
+│
+├── venv/                         (Tạo auto)
+├── README.md
+├── requirements.txt              ✅ Danh sách thư viện
+└── .gitignore (tùy chọn)
+```
+
+⚠️ **QUAN TRỌNG:** Folder `data/` phải ở cùng cấp với folder `notebook/`
+
+---
+
+## 🆘 TROUBLESHOOTING
+
+### ❌ Lỗi: "Python not found" hoặc "Command not found"
+
+**Nguyên nhân:** Python chưa được thêm vào PATH
+
+**Giải pháp:**
+1. Tải lại Python 3.13.19
+2. **Khi cài đặt, TICK ☑️ "Add python to PATH"**
+3. Restart máy
+4. Thử lại `python --version`
+
+---
+
+### ❌ Lỗi: "No module named 'pandas'" hoặc "No module named 'underthesea'"
+
+**Nguyên nhân:** Virtual environment chưa được kích hoạt
+
+**Giải pháp:**
+
+```bash
+# Kích hoạt venv trước
+source venv/bin/activate      # macOS/Linux
+venv\Scripts\activate          # Windows
+
+# Rồi cài lại
+pip install -r requirements.txt
 ```
 
 ---
 
-## 🔑 Điểm nổi bật
+### ❌ Lỗi: "requirements.txt not found"
 
-✅ **Phát hiện dữ liệu ngoại lai:** 315 dòng tiếng Anh lẫn trong CSV (3.9%) - Chất lượng dữ liệu tốt!
+**Nguyên nhân:** Không ở trong folder project
 
-✅ **2 Phương pháp so sánh:** Không chỉ làm, mà còn so sánh được khi nào dùng cái nào
+**Giải pháp:**
+```bash
+# Kiểm tra bạn ở folder nào
+pwd          # macOS/Linux
+cd           # Windows
 
-✅ **4 Lớp OOP:** Tuân thủ nguyên tắc lập trình sạch - dễ bảo trì, mở rộng
+# Vào folder project chứa requirements.txt
+cd /đường/dẫn/đến/project
 
-✅ **5 Loại biểu đồ:** Bar, Pie, Grouped Bar, Boxplot, WordCloud - Trực quan hóa đẹp
-
-✅ **2 Nguồn dữ liệu:** CSV + JSON - Xử lý đa định dạng
-
----
-
-## ⚠️ Hạn chế & Cải thiện
-
-| Hạn chế | Cách sửa |
-|--------|---------|
-| Từ điển chỉ 62 từ | Dùng VietSentiWordNet hoặc mở rộng |
-| Không xử lý phủ định ("không tốt") | Thêm kiểm tra từ phủ định |
-| Chỉ 1 thuật toán ML | Thử SVM, Naive Bayes, XGBoost, LSTM |
-| Không cross-validation | Thêm k-fold CV để kiểm chứng ổn định |
-
----
-
-## 📚 Thư viện dùng
-
-```python
-pandas          # Xử lý dữ liệu
-numpy           # Tính toán số học
-underthesea     # Tách từ tiếng Việt ⭐
-scikit-learn    # Máy học (TF-IDF, LogReg)
-matplotlib      # Biểu đồ
-seaborn         # Biểu đồ đẹp
-wordcloud       # Đám mây từ
-jupyter         # Notebook
+# Rồi cài
+pip install -r requirements.txt
 ```
 
 ---
 
-## 🎓 Kỹ năng sử dụng
+### ❌ Lỗi: "Jupyter not found"
 
-- ✅ **Xử lý dữ liệu:** pandas, numpy
-- ✅ **NLP tiếng Việt:** underthesea
-- ✅ **Máy học:** scikit-learn (TF-IDF, Logistic Regression)
-- ✅ **Trực quan hóa:** matplotlib, seaborn, wordcloud
-- ✅ **Lập trình OOP:** Classes, methods, docstrings
-- ✅ **Git & Jupyter Notebook:** Workflow chuyên nghiệp
-
----
-
-## 🚀 Hướng phát triển
-
-1. **Ngắn hạn:** Mở rộng từ điển, xử lý phủ định, cross-validation
-2. **Trung hạn:** Thử nhiều thuật toán (SVM, XGBoost), scrape dữ liệu real-world
-3. **Dài hạn:** Deep learning (LSTM, PhoBERT), web app, phân tích khía cạnh
+**Giải pháp:**
+```bash
+pip install jupyter notebook
+jupyter notebook
+```
 
 ---
 
-## 📝 Kết luận
+### ❌ Lỗi: ".ipynb không mở được trên VS Code"
 
-Dự án này **hoàn thành đầy đủ các yêu cầu** của đề DT21:
-- ✅ Đọc 2+ nguồn dữ liệu
-- ✅ Tiền xử lý chi tiết
-- ✅ 2 phương pháp phân tích
-- ✅ 5 câu hỏi + 5 biểu đồ
-- ✅ So sánh & kết luận
-- ✅ Mã nguồn OOP sạch
-- ✅ Tài liệu đầy đủ
+**Giải pháp:**
+1. Cài Extension Jupyter (xem Bước 2 CÁCH 2)
+2. Nhấn **Ctrl + Shift + P** → "Reload Window"
+3. Mở lại file `.ipynb`
 
 ---
 
-## 👥 Nhóm 6
+### ❌ Lỗi: "File not found" hoặc dữ liệu không tải được
 
-| Người | MSSV | Đóng góp |
+**Nguyên nhân:** Cấu trúc thư mục sai
+
+**Giải pháp:**
+```
+Đảm bảo:
+- Folder "data/" có file uit_vsfc.csv
+- Folder "data/" có file du_lieu_them.json
+- Folder "data/" ở cùng cấp với folder "notebook/"
+```
+
+---
+
+## 📝 QUY TRÌNH NHANH (Lần sau)
+
+Sau lần đầu cài đặt, lần sau chỉ cần:
+
+```bash
+# 1. Mở Terminal, cd vào project
+cd /đường/dẫn/đến/project
+
+# 2. Kích hoạt venv
+source venv/bin/activate      # macOS/Linux
+venv\Scripts\activate          # Windows
+
+# 3. Chạy code
+jupyter notebook               # Jupyter
+# hoặc
+code .                        # VS Code
+```
+
+**Tổng cộng:** 30 giây thay vì 20 phút! ⚡
+
+---
+
+## 🎯 TÓBM TẮT
+
+| Bước | Lệnh | Thời gian |
 |------|------|---------|
-| Nguyễn Phương Nam | 3120225094 | 100% |
-| Đào Nhật Minh | 3120225091 | 100% |
-| Thái Thị Hoàng Trinh | 3120225163 | 100% |
+| 1. Cài Python | Tải & cài | 10 phút |
+| 2. Tạo venv | `python -m venv venv` | 2 phút |
+| 3. Cài thư viện | `pip install -r requirements.txt` | 5 phút |
+| 4. Chạy code | `jupyter notebook` | 30 giây |
+| **TỔNG** | - | **~20 phút** |
 
-**Giảng viên:** Nguyễn Hoàng Hải
+---
 
+## 💡 MẸO
+
+1. **Để kích hoạt venv nhanh hơn**, tạo file `.bat` (Windows) hoặc `.sh` (Mac/Linux):
+   ```bash
+   source venv/bin/activate && jupyter notebook
+   ```
+
+2. **Nếu lỗi pip**, thử:
+   ```bash
+   pip install --upgrade pip
+   ```
+
+3. **Nếu slow**, đóng browser rồi mở lại Jupyter
+
+---
+
+## 📞 CẦN GIÚP?
+
+Kiểm tra trong thứ tự này:
+1. ✅ Python cài đúng? `python --version` → 3.13.19
+2. ✅ Virtual environment kích hoạt? Thấy `(venv)` chưa?
+3. ✅ Thư viện cài đầy đủ? `pip list` → có pandas, numpy, ...
+4. ✅ Cấu trúc thư mục đúng? Có folder `data/` không?
+5. ✅ Restart VS Code / Browser
+
+---
+
+## 📚 TÀI LIỆU KHÁC
+
+- `README_CHUYEN_NGHIEP.md` - Thông tin chi tiết về dự án
+- `README_TLDR.md` - Tóm tắt dự án
+- `HUONG_DAN_CHAY_TREN_VS_CODE.md` - Chi tiết hơn cho VS Code
+
+---
+
+**Chúc bạn cài đặt & chạy chương trình thành công! 🚀**
